@@ -40,6 +40,17 @@ except ImportError:
     import subprocess
 
 
+class Bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
 class WhenChanged(FileSystemEventHandler):
     # files to exclude from being watched
     exclude = re.compile(r'|'.join(r'(.+/)?'+ a for a in [
@@ -99,7 +110,7 @@ class WhenChanged(FileSystemEventHandler):
         if self.verbose_mode > 2:
             print_message += '.' + now.strftime('%f') + ", running '" + ' '.join(self.command) + "'"
         if print_message:
-            print('==> ' + print_message + ' <==')
+            print(Bcolors.WARNING + '==> ' + print_message + ' <==' + Bcolors.ENDC)
         self.set_envvar('file', thefile)
         stdout = open(os.devnull, 'wb') if self.quiet_mode else None
         subprocess.call(new_command, shell=(len(new_command) == 1), env=self.process_env, stdout=stdout)
